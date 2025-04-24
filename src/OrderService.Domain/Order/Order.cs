@@ -1,31 +1,29 @@
 ﻿using OrderService.Domain.Common;
 using OrderService.Domain.DomainService;
+using OrderService.Domain.Order.Dto;
 using OrderService.Domain.Order.Exceptions;
 
 namespace OrderService.Domain.Order;
 
 public class Order
 {
-    public static async Task<Order> PlaceAsync(
-        ICustomerDomainService customerDomainService,
-        int customerId, int[] productIds, string shippingAddress, string paymentMethod, string? optionalNote = null
-    )
+    public static async Task<Order> PlaceAsync(ICustomerDomainService customerDomainService, PlaceDto dto)
     {
-        var isCustomerExists = await customerDomainService.IsCustomerExistsAsync(customerId);
+        var isCustomerExists = await customerDomainService.IsCustomerExistsAsync(dto.CustomerId);
         Guard.Assert<CustomerNotFoundException>(isCustomerExists is false);
 
-        Guard.Assert<ProductIsRequiredException>(productIds.Length == 0);
-        Guard.Assert<ShippingAddressIsRequiredException>(string.IsNullOrWhiteSpace(shippingAddress));
-        Guard.Assert<PaymentMethodIsRequiredException>(string.IsNullOrWhiteSpace(paymentMethod));
+        Guard.Assert<ProductIsRequiredException>(dto.ProductIds.Length == 0);
+        Guard.Assert<ShippingAddressIsRequiredException>(string.IsNullOrWhiteSpace(dto.ShippingAddress));
+        Guard.Assert<PaymentMethodIsRequiredException>(string.IsNullOrWhiteSpace(dto.PaymentMethod));
 
         return new Order
         {
-            CustomerId = customerId,
+            CustomerId = dto.CustomerId,
             Status = OrderStatus.Pending,
-            ProductIds = productIds,
-            ShippingAddress = shippingAddress,
-            PaymentMethod = paymentMethod,
-            OptionalNote = optionalNote
+            ProductIds = dto.ProductIds,
+            ShippingAddress = dto.ShippingAddress,
+            PaymentMethod = dto.PaymentMethod,
+            OptionalNote = dto.OptionalNote
         };
     }
 

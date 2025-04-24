@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using OrderService.Domain.Order;
+using OrderService.Domain.Order.Dto;
 using OrderService.Domain.Order.Exceptions;
 
 namespace OrderService.Test;
@@ -13,7 +14,8 @@ public class OrderTests
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
 
         var order = await Order.PlaceAsync(
-            customerDomainService, customerId: 1, productIds: [1], shippingAddress: "1", paymentMethod: "payment"
+            customerDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
         order.Status.Should().Be(OrderStatus.Pending);
@@ -26,7 +28,8 @@ public class OrderTests
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService, customerId: 1, productIds: [], shippingAddress: "1", paymentMethod: "payment"
+            customerDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
         await action.Should().ThrowExactlyAsync<ProductIsRequiredException>();
@@ -39,8 +42,8 @@ public class OrderTests
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService, customerId: 1, productIds: [1],
-            shippingAddress: string.Empty, paymentMethod: "payment"
+            customerDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: string.Empty, PaymentMethod: "payment")
         );
 
         await action.Should().ThrowExactlyAsync<ShippingAddressIsRequiredException>();
@@ -53,7 +56,8 @@ public class OrderTests
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService, customerId: 1, productIds: [1], shippingAddress: "1", paymentMethod: string.Empty
+            customerDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: string.Empty)
         );
 
         await action.Should().ThrowExactlyAsync<PaymentMethodIsRequiredException>();
@@ -66,8 +70,10 @@ public class OrderTests
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
 
         var order = await Order.PlaceAsync(
-            customerDomainService, customerId: 1, productIds: [1],
-            shippingAddress: "1", paymentMethod: "payment", optionalNote: "notes"
+            customerDomainService,
+            new PlaceDto(
+                CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment", OptionalNote: "notes"
+            )
         );
 
         order.CustomerId.Should().Be(1);
@@ -85,7 +91,8 @@ public class OrderTests
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(false);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService, customerId: 1, productIds: [1], shippingAddress: "1", paymentMethod: string.Empty
+            customerDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
         await action.Should().ThrowExactlyAsync<CustomerNotFoundException>();
