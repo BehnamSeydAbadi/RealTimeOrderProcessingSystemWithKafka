@@ -6,6 +6,12 @@ bin-release/
 
 # Other files and folders
 .settings/
+.v2
+.backup.json
+.suo
+.vsidx
+.v9.bin
+.idea
 
 # Executables
 *.swf
