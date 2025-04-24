@@ -97,4 +97,18 @@ public class OrderTests
 
         await action.Should().ThrowExactlyAsync<CustomerNotFoundException>();
     }
+
+    [Fact(DisplayName =
+        "When an order gets placed with duplicate products, Then an exception should be thrown")]
+    public async Task PlaceOrder_WithDuplicateProducts_ShouldThrowException()
+    {
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        var action = () => Order.PlaceAsync(
+            customerDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1, 1], ShippingAddress: "1", PaymentMethod: "payment")
+        );
+
+        await action.Should().ThrowExactlyAsync<DuplicateProductException>();
+    }
 }

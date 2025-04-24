@@ -13,6 +13,7 @@ public class Order
         Guard.Assert<CustomerNotFoundException>(isCustomerExists is false);
 
         Guard.Assert<ProductIsRequiredException>(dto.ProductIds.Length == 0);
+        Guard.Assert<DuplicateProductException>(dto.ProductIds.Length > dto.ProductIds.Distinct().Count());
         Guard.Assert<ShippingAddressIsRequiredException>(string.IsNullOrWhiteSpace(dto.ShippingAddress));
         Guard.Assert<PaymentMethodIsRequiredException>(string.IsNullOrWhiteSpace(dto.PaymentMethod));
 
