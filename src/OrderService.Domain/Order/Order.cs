@@ -30,7 +30,8 @@ public class Order
             ProductIds = dto.ProductIds,
             ShippingAddress = dto.ShippingAddress,
             PaymentMethod = dto.PaymentMethod,
-            OptionalNote = dto.OptionalNote
+            OptionalNote = dto.OptionalNote,
+            PlacedAt = DateTime.UtcNow
         };
     }
 
@@ -40,4 +41,5 @@ public class Order
     public string ShippingAddress { get; private set; }
     public string PaymentMethod { get; private set; }
     public string? OptionalNote { get; private set; }
+    public DateTime PlacedAt { get; private set; }
 }

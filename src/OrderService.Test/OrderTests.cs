@@ -135,4 +135,19 @@ public class OrderTests
             because: $"Product ids: 2, 3 was not found"
         );
     }
+
+    [Fact(DisplayName =
+        "When an order gets placed, Then it's date and time placement should be set")]
+    public async Task PlaceOrder_ShouldTimestampBeSet()
+    {
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
+
+        var order = await Order.PlaceAsync(
+            customerDomainService, productDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment")
+        );
+
+        order.PlacedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+    }
 }
