@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using OrderService.Domain.Order;
 using OrderService.Domain.Order.Dto;
+using OrderService.Domain.Order.Events;
 using OrderService.Domain.Order.Exceptions;
 
 namespace OrderService.Test;
@@ -99,12 +100,14 @@ public class OrderTests
             )
         );
 
+        order.Id.Should().NotBe(Guid.Empty);
         order.CustomerId.Should().Be(customerId);
         order.Status.Should().Be(OrderStatus.Pending);
         order.ProductIds[0].Should().Be(validProductIds[0]);
         order.ShippingAddress.Should().Be("1");
         order.PaymentMethod.Should().Be("payment");
         order.OptionalNote.Should().Be("notes");
+        order.PlacedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
     }
 
     [Fact(DisplayName =
@@ -186,5 +189,38 @@ public class OrderTests
         );
 
         order.PlacedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+    }
+
+    [Fact(DisplayName =
+        "When an order gets placed, Then an event should be queued")]
+    public async Task PlaceOrder_ShouldEnqueueEvent()
+    {
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        Guid[] validProductIds = [Guid.NewGuid()];
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(validProductIds);
+
+        var order = await Order.PlaceAsync(
+            customerDomainService, productDomainService,
+            new PlaceDto(
+                CustomerId: Guid.NewGuid(), ProductIds: validProductIds,
+                ShippingAddress: "1", PaymentMethod: "payment"
+            )
+        );
+
+        order.GetDomainEventsQueue().Should().NotBeEmpty();
+
+        var domainEvent = order.GetDomainEventsQueue().Dequeue();
+        domainEvent.Should().BeOfType<OrderPlacedEvent>();
+
+        var orderPlacedEvent = (OrderPlacedEvent)domainEvent;
+        orderPlacedEvent.Id.Should().Be(order.Id);
+        orderPlacedEvent.CustomerId.Should().Be(order.CustomerId);
+        orderPlacedEvent.Status.Should().Be(order.Status);
+        orderPlacedEvent.ProductIds.Should().BeEquivalentTo(order.ProductIds);
+        orderPlacedEvent.ShippingAddress.Should().Be(order.ShippingAddress);
+        orderPlacedEvent.PaymentMethod.Should().Be(order.PaymentMethod);
+        orderPlacedEvent.OptionalNote.Should().Be(order.OptionalNote);
+        orderPlacedEvent.PlacedAt.Should().Be(order.PlacedAt);
     }
 }

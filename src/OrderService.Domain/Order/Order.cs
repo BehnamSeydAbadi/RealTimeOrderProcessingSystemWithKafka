@@ -1,11 +1,12 @@
 ﻿using OrderService.Domain.Common;
 using OrderService.Domain.DomainService;
 using OrderService.Domain.Order.Dto;
+using OrderService.Domain.Order.Events;
 using OrderService.Domain.Order.Exceptions;
 
 namespace OrderService.Domain.Order;
 
-public class Order
+public class Order : AbstractAggregateRoot
 {
     public static async Task<Order> PlaceAsync(
         ICustomerDomainService customerDomainService, IProductDomainService productDomainService, PlaceDto dto
@@ -23,7 +24,7 @@ public class Order
         var invalidProductIds = dto.ProductIds.Except(validProductIds).ToArray();
         Guard.Assert(invalidProductIds.Length > 0, new ProductsNotFoundException(invalidProductIds));
 
-        return new Order
+        var order = new Order
         {
             Id = Guid.NewGuid(),
             CustomerId = dto.CustomerId,
@@ -34,6 +35,15 @@ public class Order
             OptionalNote = dto.OptionalNote,
             PlacedAt = DateTime.UtcNow
         };
+
+        order.EnqueueDomainEvent(
+            new OrderPlacedEvent(
+                order.Id, order.CustomerId, order.Status, order.ProductIds,
+                order.ShippingAddress, order.PaymentMethod, order.OptionalNote, order.PlacedAt
+            )
+        );
+
+        return order;
     }
 
     public Guid Id { get; private set; }
