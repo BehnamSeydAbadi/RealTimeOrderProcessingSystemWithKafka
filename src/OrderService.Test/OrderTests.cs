@@ -10,7 +10,10 @@ public class OrderTests
         "When an order gets placed, Then it's status should be Pending")]
     public void PlaceOrder_Should_SetStatusToPending()
     {
-        var order = Order.Place(productIds: [1], shippingAddress: "1", paymentMethod: "payment");
+        var order = Order.Place(
+            productIds: [1], shippingAddress: "1", paymentMethod: "payment"
+        );
+
         order.Status.Should().Be(OrderStatus.Pending);
     }
 
@@ -36,5 +39,20 @@ public class OrderTests
     {
         var action = () => Order.Place(productIds: [1], shippingAddress: "1", paymentMethod: string.Empty);
         action.Should().ThrowExactly<PaymentMethodIsRequiredException>();
+    }
+
+    [Fact(DisplayName =
+        "When an order gets placed with correct data, Then it should be placed with correct data successfully")]
+    public void PlaceOrder_WithCorrectData_ShouldBePlacedSuccessfully()
+    {
+        var order = Order.Place(
+            productIds: [1], shippingAddress: "1", paymentMethod: "payment", optionalNote: "notes"
+        );
+
+        order.Status.Should().Be(OrderStatus.Pending);
+        order.ProductIds[0].Should().Be(1);
+        order.ShippingAddress.Should().Be("1");
+        order.PaymentMethod.Should().Be("payment");
+        order.OptionalNote.Should().Be("notes");
     }
 }
