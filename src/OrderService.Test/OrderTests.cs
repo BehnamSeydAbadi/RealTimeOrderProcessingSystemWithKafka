@@ -8,10 +8,12 @@ public class OrderTests
 {
     [Fact(DisplayName =
         "When an order gets placed, Then it's status should be Pending")]
-    public void PlaceOrder_Should_SetStatusToPending()
+    public async Task PlaceOrder_Should_SetStatusToPending()
     {
-        var order = Order.Place(
-            productIds: [1], shippingAddress: "1", paymentMethod: "payment"
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        var order = await Order.PlaceAsync(
+            customerDomainService, customerId: 1, productIds: [1], shippingAddress: "1", paymentMethod: "payment"
         );
 
         order.Status.Should().Be(OrderStatus.Pending);
@@ -19,40 +21,73 @@ public class OrderTests
 
     [Fact(DisplayName =
         "When an order gets placed without any product, Then an exception should be thrown")]
-    public void PlaceOrder_WithoutAnyProduct_ShouldThrowException()
+    public async Task PlaceOrder_WithoutAnyProduct_ShouldThrowException()
     {
-        var action = () => Order.Place(productIds: [], shippingAddress: "1", paymentMethod: "payment");
-        action.Should().ThrowExactly<ProductIsRequiredException>();
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        var action = () => Order.PlaceAsync(
+            customerDomainService, customerId: 1, productIds: [], shippingAddress: "1", paymentMethod: "payment"
+        );
+
+        await action.Should().ThrowExactlyAsync<ProductIsRequiredException>();
     }
 
     [Fact(DisplayName =
         "When an order gets placed without shipping address, Then an exception should be thrown")]
-    public void PlaceOrder_WithoutShippingAddress_ShouldThrowException()
+    public async Task PlaceOrder_WithoutShippingAddress_ShouldThrowException()
     {
-        var action = () => Order.Place(productIds: [1], shippingAddress: string.Empty, paymentMethod: "payment");
-        action.Should().ThrowExactly<ShippingAddressIsRequiredException>();
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        var action = () => Order.PlaceAsync(
+            customerDomainService, customerId: 1, productIds: [1],
+            shippingAddress: string.Empty, paymentMethod: "payment"
+        );
+
+        await action.Should().ThrowExactlyAsync<ShippingAddressIsRequiredException>();
     }
 
     [Fact(DisplayName =
         "When an order gets placed without payment method, Then an exception should be thrown")]
-    public void PlaceOrder_WithoutPaymentMethod_ShouldThrowException()
+    public async Task PlaceOrder_WithoutPaymentMethod_ShouldThrowException()
     {
-        var action = () => Order.Place(productIds: [1], shippingAddress: "1", paymentMethod: string.Empty);
-        action.Should().ThrowExactly<PaymentMethodIsRequiredException>();
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        var action = () => Order.PlaceAsync(
+            customerDomainService, customerId: 1, productIds: [1], shippingAddress: "1", paymentMethod: string.Empty
+        );
+
+        await action.Should().ThrowExactlyAsync<PaymentMethodIsRequiredException>();
     }
 
     [Fact(DisplayName =
         "When an order gets placed with correct data, Then it should be placed with correct data successfully")]
-    public void PlaceOrder_WithCorrectData_ShouldBePlacedSuccessfully()
+    public async Task PlaceOrder_WithCorrectData_ShouldBePlacedSuccessfully()
     {
-        var order = Order.Place(
-            productIds: [1], shippingAddress: "1", paymentMethod: "payment", optionalNote: "notes"
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        var order = await Order.PlaceAsync(
+            customerDomainService, customerId: 1, productIds: [1],
+            shippingAddress: "1", paymentMethod: "payment", optionalNote: "notes"
         );
 
+        order.CustomerId.Should().Be(1);
         order.Status.Should().Be(OrderStatus.Pending);
         order.ProductIds[0].Should().Be(1);
         order.ShippingAddress.Should().Be("1");
         order.PaymentMethod.Should().Be("payment");
         order.OptionalNote.Should().Be("notes");
+    }
+
+    [Fact(DisplayName =
+        "When an order gets placed with invalid customer id, Then an exception should be thrown")]
+    public async Task PlaceOrder_WithInvalidCustomerId_ShouldThrowException()
+    {
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(false);
+
+        var action = () => Order.PlaceAsync(
+            customerDomainService, customerId: 1, productIds: [1], shippingAddress: "1", paymentMethod: string.Empty
+        );
+
+        await action.Should().ThrowExactlyAsync<CustomerNotFoundException>();
     }
 }
