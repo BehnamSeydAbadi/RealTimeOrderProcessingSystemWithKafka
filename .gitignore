@@ -12,6 +12,7 @@ bin-release/
 .vsidx
 .v9.bin
 .idea
+.DotSettings.user
 
 # Executables
 *.swf

@@ -5,9 +5,10 @@ namespace OrderService.Domain.Order;
 
 public class Order
 {
-    public static Order Place(int[] productIds)
+    public static Order Place(int[] productIds, string shippingAddress)
     {
         Guard.Assert<ProductIsRequiredException>(productIds.Length == 0);
+        Guard.Assert<ShippingAddressIsRequiredException>(string.IsNullOrWhiteSpace(shippingAddress));
 
         return new Order
         {
