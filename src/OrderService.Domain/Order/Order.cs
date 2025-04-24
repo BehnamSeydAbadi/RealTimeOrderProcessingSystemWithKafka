@@ -7,15 +7,21 @@ namespace OrderService.Domain.Order;
 
 public class Order
 {
-    public static async Task<Order> PlaceAsync(ICustomerDomainService customerDomainService, PlaceDto dto)
+    public static async Task<Order> PlaceAsync(
+        ICustomerDomainService customerDomainService, IProductDomainService productDomainService, PlaceDto dto
+    )
     {
-        var isCustomerExists = await customerDomainService.IsCustomerExistsAsync(dto.CustomerId);
-        Guard.Assert<CustomerNotFoundException>(isCustomerExists is false);
-
         Guard.Assert<ProductIsRequiredException>(dto.ProductIds.Length == 0);
         Guard.Assert<DuplicateProductException>(dto.ProductIds.Length > dto.ProductIds.Distinct().Count());
         Guard.Assert<ShippingAddressIsRequiredException>(string.IsNullOrWhiteSpace(dto.ShippingAddress));
         Guard.Assert<PaymentMethodIsRequiredException>(string.IsNullOrWhiteSpace(dto.PaymentMethod));
+
+        var isCustomerExists = await customerDomainService.IsCustomerExistsAsync(dto.CustomerId);
+        Guard.Assert<CustomerNotFoundException>(isCustomerExists is false);
+
+        var validProductIds = await productDomainService.FilterOutValidProductIdsAsync(dto.ProductIds);
+        var invalidProductIds = dto.ProductIds.Except(validProductIds).ToArray();
+        Guard.Assert(invalidProductIds.Length > 0, new ProductsNotFoundException(invalidProductIds));
 
         return new Order
         {

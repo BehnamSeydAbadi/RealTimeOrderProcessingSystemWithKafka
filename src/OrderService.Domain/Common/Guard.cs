@@ -7,7 +7,7 @@ public class Guard
         if (isRuleViolated) throw new TException();
     }
 
-    public static void Assert<TException>(bool isRuleViolated, TException exception) where TException : Exception, new()
+    public static void Assert<TException>(bool isRuleViolated, TException exception) where TException : Exception
     {
         if (isRuleViolated) throw exception;
     }

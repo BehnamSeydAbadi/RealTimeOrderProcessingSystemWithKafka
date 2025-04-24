@@ -12,9 +12,10 @@ public class OrderTests
     public async Task PlaceOrder_Should_SetStatusToPending()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
 
         var order = await Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
@@ -26,9 +27,10 @@ public class OrderTests
     public async Task PlaceOrder_WithoutAnyProduct_ShouldThrowException()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New();
 
         var action = () => Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(CustomerId: 1, ProductIds: [], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
@@ -40,9 +42,10 @@ public class OrderTests
     public async Task PlaceOrder_WithoutShippingAddress_ShouldThrowException()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: string.Empty, PaymentMethod: "payment")
         );
 
@@ -54,9 +57,10 @@ public class OrderTests
     public async Task PlaceOrder_WithoutPaymentMethod_ShouldThrowException()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: string.Empty)
         );
 
@@ -68,9 +72,10 @@ public class OrderTests
     public async Task PlaceOrder_WithCorrectData_ShouldBePlacedSuccessfully()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
 
         var order = await Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(
                 CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment", OptionalNote: "notes"
             )
@@ -89,9 +94,10 @@ public class OrderTests
     public async Task PlaceOrder_WithInvalidCustomerId_ShouldThrowException()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(false);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(CustomerId: 1, ProductIds: [1], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
@@ -103,12 +109,30 @@ public class OrderTests
     public async Task PlaceOrder_WithDuplicateProducts_ShouldThrowException()
     {
         var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
 
         var action = () => Order.PlaceAsync(
-            customerDomainService,
+            customerDomainService, productDomainService,
             new PlaceDto(CustomerId: 1, ProductIds: [1, 1], ShippingAddress: "1", PaymentMethod: "payment")
         );
 
         await action.Should().ThrowExactlyAsync<DuplicateProductException>();
+    }
+
+    [Fact(DisplayName =
+        "When an order gets placed with invalid product ids, Then an exception should be thrown")]
+    public async Task PlaceOrder_WithInvalidProductIds_ShouldThrowException()
+    {
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(1);
+
+        var action = () => Order.PlaceAsync(
+            customerDomainService, productDomainService,
+            new PlaceDto(CustomerId: 1, ProductIds: [1, 2, 3], ShippingAddress: "1", PaymentMethod: "payment")
+        );
+
+        await action.Should().ThrowExactlyAsync<ProductsNotFoundException>(
+            because: $"Product ids: 2, 3 was not found"
+        );
     }
 }
