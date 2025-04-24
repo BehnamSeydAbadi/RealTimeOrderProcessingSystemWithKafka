@@ -4,7 +4,7 @@ namespace OrderService.Test;
 
 public class StubProductDomainService : IProductDomainService
 {
-    private int[] _validProductIds = [];
+    private Guid[] _validProductIds = [];
 
     private StubProductDomainService()
     {
@@ -12,13 +12,13 @@ public class StubProductDomainService : IProductDomainService
 
     public static StubProductDomainService New() => new();
 
-    public StubProductDomainService WithValidProductIds(params int[] validProductIds)
+    public StubProductDomainService WithValidProductIds(params Guid[] validProductIds)
     {
         _validProductIds = validProductIds;
         return this;
     }
 
-    public async Task<int[]> FilterOutValidProductIdsAsync(int[] productIds)
+    public async Task<Guid[]> FilterOutValidProductIdsAsync(Guid[] productIds)
     {
         await Task.CompletedTask;
         return _validProductIds;

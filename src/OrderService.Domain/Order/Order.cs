@@ -25,6 +25,7 @@ public class Order
 
         return new Order
         {
+            Id = Guid.NewGuid(),
             CustomerId = dto.CustomerId,
             Status = OrderStatus.Pending,
             ProductIds = dto.ProductIds,
@@ -35,9 +36,10 @@ public class Order
         };
     }
 
-    public int CustomerId { get; private set; }
+    public Guid Id { get; private set; }
+    public Guid CustomerId { get; private set; }
     public OrderStatus Status { get; private set; }
-    public int[] ProductIds { get; private set; } = [];
+    public Guid[] ProductIds { get; private set; } = [];
     public string ShippingAddress { get; private set; }
     public string PaymentMethod { get; private set; }
     public string? OptionalNote { get; private set; }

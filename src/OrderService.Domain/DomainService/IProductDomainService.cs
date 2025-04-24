@@ -2,5 +2,5 @@ namespace OrderService.Domain.DomainService;
 
 public interface IProductDomainService
 {
-    Task<int[]> FilterOutValidProductIdsAsync(int[] productIds);
+    Task<Guid[]> FilterOutValidProductIdsAsync(Guid[] productIds);
 }

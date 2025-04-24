@@ -1,8 +1,8 @@
 ﻿namespace OrderService.Domain.Order.Dto;
 
 public record PlaceDto(
-    int CustomerId,
-    int[] ProductIds,
+    Guid CustomerId,
+    Guid[] ProductIds,
     string ShippingAddress,
     string PaymentMethod,
     string? OptionalNote = null

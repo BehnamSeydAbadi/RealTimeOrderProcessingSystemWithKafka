@@ -2,5 +2,5 @@
 
 public interface ICustomerDomainService
 {
-    Task<bool> IsCustomerExistsAsync(int customerId);
+    Task<bool> IsCustomerExistsAsync(Guid customerId);
 }

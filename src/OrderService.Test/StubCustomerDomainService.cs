@@ -18,7 +18,7 @@ public class StubCustomerDomainService : ICustomerDomainService
         return this;
     }
 
-    public async Task<bool> IsCustomerExistsAsync(int customerId)
+    public async Task<bool> IsCustomerExistsAsync(Guid customerId)
     {
         await Task.CompletedTask;
         return _isCustomerExists;
