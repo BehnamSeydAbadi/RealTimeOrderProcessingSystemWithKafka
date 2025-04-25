@@ -1,6 +1,8 @@
-namespace OrderService.Domain.DomainService;
+using OrderService.Domain.DomainService;
 
-internal class ProductDomainService : IProductDomainService
+namespace OrderService.Infrastructure.DomainServices;
+
+public class ProductDomainService : IProductDomainService
 {
     public async Task<Guid[]> FilterOutValidProductIdsAsync(Guid[] productIds)
     {

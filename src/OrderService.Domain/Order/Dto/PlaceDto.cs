@@ -1,9 +1,10 @@
 ﻿namespace OrderService.Domain.Order.Dto;
 
-public record PlaceDto(
-    Guid CustomerId,
-    Guid[] ProductIds,
-    string ShippingAddress,
-    string PaymentMethod,
-    string? OptionalNote = null
-);
+public record PlaceDto
+{
+    public Guid CustomerId { get; set; }
+    public Guid[] ProductIds { get; set; } = [];
+    public string ShippingAddress { get; set; }
+    public string PaymentMethod { get; set; }
+    public string? OptionalNote { get; set; }
+}

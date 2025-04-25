@@ -1,6 +1,8 @@
-namespace OrderService.Domain.DomainService;
+using OrderService.Domain.DomainService;
 
-internal class CustomerDomainService : ICustomerDomainService
+namespace OrderService.Infrastructure.DomainServices;
+
+public class CustomerDomainService : ICustomerDomainService
 {
     public async Task<bool> IsCustomerExistsAsync(Guid customerId)
     {

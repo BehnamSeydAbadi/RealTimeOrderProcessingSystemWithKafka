@@ -1,14 +1,17 @@
-using OrderService.Domain;
+using Mapster;
 using OrderService.Infrastructure;
+using OrderService.WebApi.Order;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMapster();
+builder.Services.AddMediator();
 
-DomainBootstrapper.Run(builder.Services);
-// ApplicationBootstrapper.Run(builder.Services);
 InfrastructureBootstrapper.Run(builder.Services);
+
+OrderMapper.Register();
 
 var app = builder.Build();
 

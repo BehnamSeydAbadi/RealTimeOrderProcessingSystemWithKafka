@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Mapster.DependencyInjection" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
         <PackageReference Include="Swashbuckle.AspNetCore"/>
     </ItemGroup>
@@ -16,8 +17,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\OrderService.Application.Query\OrderService.Application.Query.csproj" />
         <ProjectReference Include="..\OrderService.Domain\OrderService.Domain.csproj"/>
         <ProjectReference Include="..\OrderService.Infrastructure\OrderService.Infrastructure.csproj"/>
+        <ProjectReference Include="..\OrderService.QueryStack\OrderService.QueryStack.csproj" />
     </ItemGroup>
 
 </Project>
