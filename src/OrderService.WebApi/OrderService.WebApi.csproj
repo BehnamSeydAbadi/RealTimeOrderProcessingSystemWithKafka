@@ -5,9 +5,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Mapster.DependencyInjection" />
+        <PackageReference Include="Mapster.DependencyInjection"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
         <PackageReference Include="Swashbuckle.AspNetCore"/>
+        <PackageReference Include="Mediator.SourceGenerator">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -17,10 +21,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\OrderService.Application.Query\OrderService.Application.Query.csproj" />
+        <ProjectReference Include="..\OrderService.Application.Query\OrderService.Application.Query.csproj"/>
         <ProjectReference Include="..\OrderService.Domain\OrderService.Domain.csproj"/>
         <ProjectReference Include="..\OrderService.Infrastructure\OrderService.Infrastructure.csproj"/>
-        <ProjectReference Include="..\OrderService.QueryStack\OrderService.QueryStack.csproj" />
+        <ProjectReference Include="..\OrderService.QueryStack\OrderService.QueryStack.csproj"/>
     </ItemGroup>
 
 </Project>

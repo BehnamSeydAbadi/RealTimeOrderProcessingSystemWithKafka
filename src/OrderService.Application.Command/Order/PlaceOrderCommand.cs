@@ -2,7 +2,7 @@ using Mediator;
 
 namespace OrderService.Application.Command.Order;
 
-public class PlaceOrderCommand : IRequest<Guid>
+public record PlaceOrderCommand : IRequest<Guid>
 {
     public Guid CustomerId { get; set; }
     public Guid[] ProductIds { get; set; }

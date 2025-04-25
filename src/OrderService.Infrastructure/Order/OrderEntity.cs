@@ -4,12 +4,12 @@ namespace OrderService.Infrastructure.Order;
 
 public class OrderEntity
 {
-    public Guid Id { get; private set; }
-    public Guid CustomerId { get; private set; }
-    public OrderStatus Status { get; private set; }
-    public Guid[] ProductIds { get; private set; } = [];
-    public string ShippingAddress { get; private set; }
-    public string PaymentMethod { get; private set; }
-    public string? OptionalNote { get; private set; }
-    public DateTime PlacedAt { get; private set; }
+    public Guid Id { get; set; }
+    public Guid CustomerId { get; set; }
+    public OrderStatus Status { get; set; }
+    public Guid[] ProductIds { get; set; } = [];
+    public string ShippingAddress { get; set; }
+    public string PaymentMethod { get; set; }
+    public string? OptionalNote { get; set; }
+    public DateTime PlacedAt { get; set; }
 }

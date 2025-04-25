@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMapster();
-builder.Services.AddMediator();
+builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
 InfrastructureBootstrapper.Run(builder.Services);
 
@@ -16,6 +16,8 @@ OrderMapper.Register();
 var app = builder.Build();
 
 EnsureDatabaseCreated(app);
+
+OrderEndpoints.Map(app);
 
 app.UseSwagger();
 app.UseSwaggerUI();
