@@ -1,0 +1,6 @@
+﻿services:
+  orderservice.webapi:
+    image: orderservice.webapi
+    build:
+      context: .
+      dockerfile: OrderService.WebApi/Dockerfile
