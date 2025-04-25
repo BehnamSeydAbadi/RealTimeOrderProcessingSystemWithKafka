@@ -5,4 +5,9 @@
         <ProjectReference Include="..\OrderService.Domain\OrderService.Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory"/>
+    </ItemGroup>
+
 </Project>
