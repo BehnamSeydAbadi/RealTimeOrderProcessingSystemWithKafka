@@ -11,14 +11,15 @@ public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Guid>
 {
     private readonly ICustomerDomainService _customerDomainService;
     private readonly IProductDomainService _productDomainService;
+    private readonly IPublisher _publisher;
 
     public PlaceOrderCommandHandler(
         ICustomerDomainService customerDomainService,
-        IProductDomainService productDomainService
-    )
+        IProductDomainService productDomainService, IPublisher publisher)
     {
         _customerDomainService = customerDomainService;
         _productDomainService = productDomainService;
+        _publisher = publisher;
     }
 
     public async ValueTask<Guid> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
@@ -33,6 +34,12 @@ public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Guid>
         var placeDto = request.Adapt<PlaceDto>();
 
         var orderModel = Domain.Order.Order.Place(placeDto);
+        var domainEventsQueue = orderModel.GetDomainEventsQueue();
+
+        while (domainEventsQueue.Any())
+        {
+            await _publisher.Publish(domainEventsQueue.Dequeue());
+        }
 
         return orderModel.Id;
     }

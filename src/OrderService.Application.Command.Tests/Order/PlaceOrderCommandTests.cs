@@ -2,7 +2,8 @@ using OrderService.Application.Command.Order;
 using OrderService.Application.Command.Tests.Order.Stubs;
 using OrderService.Domain.Order.Exceptions;
 using FluentAssertions;
-using OrderService.Domain.Order.Dto;
+using OrderService.Application.Command.Tests.Order.Mock;
+using OrderService.Domain.Order;
 using OrderService.Domain.Order.Events;
 
 namespace OrderService.Application.Command.Tests.Order;
@@ -18,7 +19,9 @@ public class PlaceOrderCommandTests
         Guid[] validProductIds = [Guid.NewGuid()];
         var productDomainService = StubProductDomainService.New().WithValidProductIds(validProductIds);
 
-        var commandHandler = new PlaceOrderCommandHandler(customerDomainService, productDomainService);
+        var commandHandler = new PlaceOrderCommandHandler(
+            customerDomainService, productDomainService, StubPublisher.New()
+        );
 
         var action = async () => await commandHandler.Handle(
             new PlaceOrderCommand
@@ -31,7 +34,7 @@ public class PlaceOrderCommandTests
             },
             CancellationToken.None
         );
-        
+
         await action.Should().ThrowExactlyAsync<CustomerNotFoundException>();
     }
 
@@ -46,7 +49,9 @@ public class PlaceOrderCommandTests
 
         Guid[] invalidProductIds = [Guid.NewGuid(), Guid.NewGuid()];
 
-        var commandHandler = new PlaceOrderCommandHandler(customerDomainService, productDomainService);
+        var commandHandler = new PlaceOrderCommandHandler(
+            customerDomainService, productDomainService, StubPublisher.New()
+        );
 
         var action = async () => await commandHandler.Handle(
             new PlaceOrderCommand
@@ -65,36 +70,38 @@ public class PlaceOrderCommandTests
         );
     }
 
-    // [Fact(DisplayName =
-    //     "When an order gets placed, Then an event should be queued")]
-    // public async Task PlaceOrder_ShouldEnqueueEvent()
-    // {
-    //     var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
-    //
-    //     Guid[] validProductIds = [Guid.NewGuid()];
-    //     var productDomainService = StubProductDomainService.New().WithValidProductIds(validProductIds);
-    //
-    //     var order = await Order.Place(
-    //         customerDomainService, productDomainService,
-    //         new PlaceDto(
-    //             CustomerId: Guid.NewGuid(), ProductIds: validProductIds,
-    //             ShippingAddress: "1", PaymentMethod: "payment"
-    //         )
-    //     );
-    //
-    //     order.GetDomainEventsQueue().Should().NotBeEmpty();
-    //
-    //     var domainEvent = order.GetDomainEventsQueue().Dequeue();
-    //     domainEvent.Should().BeOfType<OrderPlacedEvent>();
-    //
-    //     var orderPlacedEvent = (OrderPlacedEvent)domainEvent;
-    //     orderPlacedEvent.Id.Should().Be(order.Id);
-    //     orderPlacedEvent.CustomerId.Should().Be(order.CustomerId);
-    //     orderPlacedEvent.Status.Should().Be(order.Status);
-    //     orderPlacedEvent.ProductIds.Should().BeEquivalentTo(order.ProductIds);
-    //     orderPlacedEvent.ShippingAddress.Should().Be(order.ShippingAddress);
-    //     orderPlacedEvent.PaymentMethod.Should().Be(order.PaymentMethod);
-    //     orderPlacedEvent.OptionalNote.Should().Be(order.OptionalNote);
-    //     orderPlacedEvent.PlacedAt.Should().Be(order.PlacedAt);
-    // }
+    [Fact(DisplayName =
+        "When an order gets placed, Then an event should be queued")]
+    public async Task PlaceOrder_ShouldEnqueueEvent()
+    {
+        var customerDomainService = StubCustomerDomainService.New().WithIsCustmerExistsValue(true);
+
+        Guid[] validProductIds = [Guid.NewGuid()];
+        var productDomainService = StubProductDomainService.New().WithValidProductIds(validProductIds);
+
+        var orderPlacedEvent = new OrderPlacedEvent(
+            id: Guid.Empty, customerId: Guid.NewGuid(), OrderStatus.Pending, productIds: validProductIds,
+            shippingAddress: "1", paymentMethod: "payment", optionalNote: "something", placedAt: DateTime.UtcNow
+        );
+
+        var mockPublisher = MockPublisher.New().WithNotification(orderPlacedEvent);
+
+        var commandHandler = new PlaceOrderCommandHandler(
+            customerDomainService, productDomainService, mockPublisher
+        );
+
+        await commandHandler.Handle(
+            new PlaceOrderCommand
+            {
+                CustomerId = orderPlacedEvent.CustomerId,
+                ProductIds = orderPlacedEvent.ProductIds,
+                ShippingAddress = orderPlacedEvent.ShippingAddress,
+                PaymentMethod = orderPlacedEvent.PaymentMethod,
+                OptionalNote = orderPlacedEvent.OptionalNote
+            },
+            CancellationToken.None
+        );
+
+        mockPublisher.VerifyOrderPlacedEvent();
+    }
 }
