@@ -14,24 +14,15 @@ public class Order : AbstractAggregateRoot
         Guard.Assert<ShippingAddressIsRequiredException>(string.IsNullOrWhiteSpace(dto.ShippingAddress));
         Guard.Assert<PaymentMethodIsRequiredException>(string.IsNullOrWhiteSpace(dto.PaymentMethod));
 
-        var order = new Order
-        {
-            Id = Guid.NewGuid(),
-            CustomerId = dto.CustomerId,
-            Status = OrderStatus.Pending,
-            ProductIds = dto.ProductIds,
-            ShippingAddress = dto.ShippingAddress,
-            PaymentMethod = dto.PaymentMethod,
-            OptionalNote = dto.OptionalNote,
-            PlacedAt = DateTime.UtcNow
-        };
+        var order = new Order();
 
-        order.EnqueueDomainEvent(
-            new OrderPlacedEvent(
-                order.Id, order.CustomerId, order.Status, order.ProductIds,
-                order.ShippingAddress, order.PaymentMethod, order.OptionalNote, order.PlacedAt
-            )
+        var orderPlacedEvent = new OrderPlacedEvent(
+            id: Guid.NewGuid(), dto.CustomerId, OrderStatus.Pending, dto.ProductIds,
+            dto.ShippingAddress, dto.PaymentMethod, dto.OptionalNote, DateTime.UtcNow
         );
+
+        order.EnqueueDomainEvent(orderPlacedEvent);
+        order.Mutate(orderPlacedEvent);
 
         return order;
     }
@@ -44,4 +35,18 @@ public class Order : AbstractAggregateRoot
     public string PaymentMethod { get; private set; }
     public string? OptionalNote { get; private set; }
     public DateTime PlacedAt { get; private set; }
+
+    protected override void When(AbstractDomainEvent domainEvent) => On((dynamic)domainEvent);
+
+    private void On(OrderPlacedEvent domainEvent)
+    {
+        this.Id = domainEvent.Id;
+        this.CustomerId = domainEvent.CustomerId;
+        this.Status = domainEvent.Status;
+        this.ProductIds = domainEvent.ProductIds;
+        this.ShippingAddress = domainEvent.ShippingAddress;
+        this.PaymentMethod = domainEvent.PaymentMethod;
+        this.OptionalNote = domainEvent.OptionalNote;
+        this.PlacedAt = domainEvent.PlacedAt;
+    }
 }

@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.QueryStack", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.WebApi", "OrderService\OrderService.WebApi\OrderService.WebApi.csproj", "{C9445556-4090-4E45-A08B-BCE6504E233C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Domain", "InventoryService\InventoryService.Domain\InventoryService.Domain.csproj", "{C855C217-445E-4E49-AA18-C7BBD7C0AD42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{C9445556-4090-4E45-A08B-BCE6504E233C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9445556-4090-4E45-A08B-BCE6504E233C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9445556-4090-4E45-A08B-BCE6504E233C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C855C217-445E-4E49-AA18-C7BBD7C0AD42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C855C217-445E-4E49-AA18-C7BBD7C0AD42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C855C217-445E-4E49-AA18-C7BBD7C0AD42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C855C217-445E-4E49-AA18-C7BBD7C0AD42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +100,6 @@ Global
 		{20500A46-336B-4EA7-864F-86363D5C397D} = {5E54CC75-6483-4F4E-8016-D287CEC89AE6}
 		{8A63EF14-A510-4675-976E-883AE9AD2FAA} = {5E54CC75-6483-4F4E-8016-D287CEC89AE6}
 		{C9445556-4090-4E45-A08B-BCE6504E233C} = {5E54CC75-6483-4F4E-8016-D287CEC89AE6}
+		{C855C217-445E-4E49-AA18-C7BBD7C0AD42} = {A898D582-E76E-46CC-8E06-9AF6DA270DDB}
 	EndGlobalSection
 EndGlobal
