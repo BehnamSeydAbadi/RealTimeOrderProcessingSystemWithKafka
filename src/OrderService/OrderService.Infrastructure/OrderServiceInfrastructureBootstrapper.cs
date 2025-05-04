@@ -7,7 +7,7 @@ using OrderService.Infrastructure.Order;
 
 namespace OrderService.Infrastructure;
 
-public class InfrastructureBootstrapper
+public class OrderServiceInfrastructureBootstrapper
 {
     public static void Run(IServiceCollection serviceCollection)
     {

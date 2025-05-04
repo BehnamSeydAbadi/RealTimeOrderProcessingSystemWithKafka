@@ -1,5 +1,6 @@
 using Mapster;
 using Mediator;
+using OrderService.Application.Command.Common;
 using OrderService.Domain.Common;
 using OrderService.Domain.DomainService;
 using OrderService.Domain.Order.Dto;
@@ -7,22 +8,21 @@ using OrderService.Domain.Order.Exceptions;
 
 namespace OrderService.Application.Command.Order;
 
-public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Guid>
+public class PlaceOrderCommandHandler : AbstractRequestHandler<PlaceOrderCommand, Guid>
 {
     private readonly ICustomerDomainService _customerDomainService;
     private readonly IProductDomainService _productDomainService;
-    private readonly IPublisher _publisher;
 
     public PlaceOrderCommandHandler(
         ICustomerDomainService customerDomainService,
-        IProductDomainService productDomainService, IPublisher publisher)
+        IProductDomainService productDomainService, IPublisher publisher
+    ) : base(publisher)
     {
         _customerDomainService = customerDomainService;
         _productDomainService = productDomainService;
-        _publisher = publisher;
     }
 
-    public async ValueTask<Guid> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+    public override async ValueTask<Guid> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
     {
         var isCustomerExists = await _customerDomainService.IsCustomerExistsAsync(request.CustomerId);
         Guard.Assert<CustomerNotFoundException>(isCustomerExists is false);
@@ -36,10 +36,7 @@ public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Guid>
         var orderModel = Domain.Order.Order.Place(placeDto);
         var domainEventsQueue = orderModel.GetDomainEventsQueue();
 
-        while (domainEventsQueue.Any())
-        {
-            await _publisher.Publish(domainEventsQueue.Dequeue());
-        }
+        await PublishDomainEventsAsync(domainEventsQueue);
 
         return orderModel.Id;
     }

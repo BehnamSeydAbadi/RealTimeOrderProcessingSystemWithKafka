@@ -9,7 +9,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMapster();
 builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
-InfrastructureBootstrapper.Run(builder.Services);
+OrderServiceInfrastructureBootstrapper.Run(builder.Services);
 
 OrderMapper.Register();
 

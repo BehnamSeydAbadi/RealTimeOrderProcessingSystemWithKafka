@@ -11,6 +11,7 @@ public class InventoryTests
     {
         var dto = new RegisterDto
         {
+            Code = "Test",
             Name = "Test",
             Location = "Test",
             Description = "Test"
@@ -19,6 +20,7 @@ public class InventoryTests
         var inventory = InventoryModel.Register(dto);
 
         inventory.Id.Should().NotBe(Guid.Empty);
+        inventory.Code.Should().Be(dto.Code);
         inventory.Name.Should().Be(dto.Name);
         inventory.Location.Should().Be(dto.Location);
         inventory.Description.Should().Be(dto.Description);
