@@ -1,7 +1,10 @@
 using InventoryService.Domain.DomainService;
 using InventoryService.Domain.Inventory;
+using InventoryService.Domain.Product;
 using InventoryService.Infrastructure.DomainService;
 using InventoryService.Infrastructure.Inventory;
+using InventoryService.Infrastructure.InventoryProduct;
+using InventoryService.Infrastructure.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +17,8 @@ public class InventoryServiceInfrastructureBootstrapper
         serviceCollection.AddScoped<IDuplicateInventoryCodeDomainService, DuplicateInventoryCodeDomainService>();
 
         serviceCollection.AddScoped<IInventoryRepository, InventoryRepository>();
+        serviceCollection.AddScoped<IProductRepository, ProductRepository>();
+        serviceCollection.AddScoped<IInventoryProductRepository, InventoryProductRepository>();
 
         serviceCollection.AddDbContext<InventoryServiceDbContext>(
             options => options.UseInMemoryDatabase($"InventoryServiceDb_{Guid.NewGuid()}"),

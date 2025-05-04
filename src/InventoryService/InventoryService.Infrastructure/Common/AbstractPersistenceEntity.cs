@@ -1,0 +1,3 @@
+namespace InventoryService.Infrastructure.Common;
+
+public abstract class AbstractPersistenceEntity;

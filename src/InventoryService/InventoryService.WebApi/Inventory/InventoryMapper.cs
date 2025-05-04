@@ -1,5 +1,6 @@
 using InventoryService.Application.Command.Inventory;
 using InventoryService.Application.Query.Inventory;
+using InventoryService.Application.Query.Inventory.ViewModels;
 using InventoryService.Domain.Inventory;
 using InventoryService.Domain.Inventory.Dto;
 using InventoryService.Domain.Inventory.Events;

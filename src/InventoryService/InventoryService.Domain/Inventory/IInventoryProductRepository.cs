@@ -2,6 +2,6 @@ using InventoryService.Domain.Common;
 
 namespace InventoryService.Domain.Inventory;
 
-public interface IInventoryRepository : IAbstractRepository
+public interface IInventoryProductRepository : IAbstractRepository
 {
 }

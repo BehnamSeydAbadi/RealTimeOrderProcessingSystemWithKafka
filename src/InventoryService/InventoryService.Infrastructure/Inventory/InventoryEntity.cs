@@ -1,6 +1,9 @@
+using InventoryService.Infrastructure.Common;
+using InventoryService.Infrastructure.InventoryProduct;
+
 namespace InventoryService.Infrastructure.Inventory;
 
-public class InventoryEntity
+public class InventoryEntity : AbstractPersistenceEntity
 {
     public Guid Id { get; set; }
     public string Code { get; set; }
@@ -9,4 +12,6 @@ public class InventoryEntity
     public string Description { get; set; }
     public bool IsActive { get; set; }
     public DateTime RegisteredAt { get; set; }
+
+    public List<InventoryProductEntity> InventoryProducts { get; set; }
 }
