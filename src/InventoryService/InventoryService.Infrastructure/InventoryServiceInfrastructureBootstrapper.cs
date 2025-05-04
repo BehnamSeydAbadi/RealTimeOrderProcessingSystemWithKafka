@@ -18,7 +18,6 @@ public class InventoryServiceInfrastructureBootstrapper
 
         serviceCollection.AddScoped<IInventoryRepository, InventoryRepository>();
         serviceCollection.AddScoped<IProductRepository, ProductRepository>();
-        serviceCollection.AddScoped<IInventoryProductRepository, InventoryProductRepository>();
 
         serviceCollection.AddDbContext<InventoryServiceDbContext>(
             options => options.UseInMemoryDatabase($"InventoryServiceDb_{Guid.NewGuid()}"),

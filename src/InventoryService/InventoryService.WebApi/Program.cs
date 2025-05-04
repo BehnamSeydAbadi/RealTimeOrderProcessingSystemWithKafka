@@ -10,7 +10,6 @@ builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetim
 
 InventoryMapper.Register();
 ProductMapper.Register();
-InventoryProductMapper.Register();
 
 var app = builder.Build();
 
