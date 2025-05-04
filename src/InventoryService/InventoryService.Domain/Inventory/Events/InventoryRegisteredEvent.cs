@@ -8,4 +8,5 @@ public record InventoryRegisteredEvent(
     string Name,
     string Location,
     string Description,
-    DateTime RegisteredAt) : AbstractDomainEvent;
+    DateTime RegisteredAt
+) : AbstractDomainEvent;

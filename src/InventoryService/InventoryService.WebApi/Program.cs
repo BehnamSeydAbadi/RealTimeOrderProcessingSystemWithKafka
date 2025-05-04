@@ -9,6 +9,7 @@ builder.Services.AddMapster();
 builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
 InventoryMapper.Register();
+ProductMapper.Register();
 
 var app = builder.Build();
 

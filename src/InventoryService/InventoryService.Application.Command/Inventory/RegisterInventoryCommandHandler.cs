@@ -24,7 +24,7 @@ public class RegisterInventoryCommandHandler : AbstractRequestHandler<RegisterIn
             await _duplicateInventoryCodeDomainService.IsInventoryCodeDuplicateAsync(request.Code)
         );
 
-        var inventory = Domain.Inventory.Inventory.Register(
+        var inventory = Domain.Inventory.InventoryModel.Register(
             new RegisterDto
             {
                 Code = request.Code,
