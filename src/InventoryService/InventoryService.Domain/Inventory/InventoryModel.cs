@@ -11,7 +11,7 @@ public class InventoryModel : AbstractAggregateRoot
     public static InventoryModel Register(RegisterDto dto)
     {
         var inventoryRegisteredEvent = new InventoryRegisteredEvent(
-            Guid.NewGuid(), dto.Code, dto.Name, dto.Location, dto.Description, DateTime.UtcNow
+            Guid.NewGuid(), dto.Code, dto.Name, dto.Location, dto.Description, DateTime.UtcNow, dto.IsActive
         );
 
         var inventory = new InventoryModel();
@@ -29,6 +29,7 @@ public class InventoryModel : AbstractAggregateRoot
     public string Location { get; private set; }
     public string Description { get; private set; }
     public DateTime RegisteredAt { get; private set; }
+    public bool IsActive { get; private set; }
     public List<ProductModel> Products { get; private set; } = new();
 
 
@@ -57,6 +58,7 @@ public class InventoryModel : AbstractAggregateRoot
         this.Name = domainEvent.Name;
         this.Location = domainEvent.Location;
         this.Description = domainEvent.Description;
+        this.IsActive = domainEvent.IsActive;
         this.RegisteredAt = domainEvent.RegisteredAt;
     }
 

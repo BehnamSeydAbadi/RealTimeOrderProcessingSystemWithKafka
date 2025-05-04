@@ -30,7 +30,8 @@ public class RegisterInventoryCommandHandler : AbstractRequestHandler<RegisterIn
                 Code = request.Code,
                 Name = request.Name,
                 Location = request.Location,
-                Description = request.Description
+                Description = request.Description,
+                IsActive = request.IsActive
             }
         );
 

@@ -15,7 +15,8 @@ public class InventoryModelTests
             Code = "Test",
             Name = "Test",
             Location = "Test",
-            Description = "Test"
+            Description = "Test",
+            IsActive = true
         };
 
         var inventory = InventoryModel.Register(dto);
@@ -25,6 +26,7 @@ public class InventoryModelTests
         inventory.Name.Should().Be(dto.Name);
         inventory.Location.Should().Be(dto.Location);
         inventory.Description.Should().Be(dto.Description);
+        inventory.IsActive.Should().Be(dto.IsActive);
         inventory.RegisteredAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
     }
 
@@ -37,7 +39,8 @@ public class InventoryModelTests
             Code = "0101",
             Name = "Tehran inventory",
             Location = "Tehran",
-            Description = "Just an inventory"
+            Description = "Just an inventory",
+            IsActive = true
         });
 
         var productDto = new ProductDto
