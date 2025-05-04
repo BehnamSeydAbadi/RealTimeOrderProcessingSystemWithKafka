@@ -1,9 +1,11 @@
 using InventoryService.Domain.Product;
+using Mediator;
 
-namespace InventoryService.Domain.Inventory;
+namespace InventoryService.Application.Command.Inventory;
 
-public record ProductDto
+public class AddProductToInventoryCommand : ICommand<Guid>
 {
+    public Guid InventoryId { get; set; }
     public string Name { get; set; }
     public string StockKeepingUnit { get; set; }
     public string Color { get; set; }

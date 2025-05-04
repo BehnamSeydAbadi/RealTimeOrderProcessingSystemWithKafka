@@ -13,8 +13,8 @@ public class DuplicateInventoryCodeDomainService : IDuplicateInventoryCodeDomain
         _repository = repository;
     }
 
-    public async Task<bool> IsInventoryCodeDuplicateAsync(string code)
+    public async Task<bool> IsInventoryCodeDuplicateAsync(string code, CancellationToken cancellationToken)
     {
-        return await _repository.AnyAsync(new InventoryGetByCodeSpecification(code));
+        return await _repository.AnyAsync(cancellationToken, new InventoryGetByCodeSpecification(code));
     }
 }

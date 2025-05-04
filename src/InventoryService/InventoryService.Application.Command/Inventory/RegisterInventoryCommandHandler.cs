@@ -7,7 +7,7 @@ using Mediator;
 
 namespace InventoryService.Application.Command.Inventory;
 
-public class RegisterInventoryCommandHandler : AbstractRequestHandler<RegisterInventoryCommand, Guid>
+public class RegisterInventoryCommandHandler : AbstractCommandHandler<RegisterInventoryCommand, Guid>
 {
     private readonly IDuplicateInventoryCodeDomainService _duplicateInventoryCodeDomainService;
 
@@ -21,7 +21,7 @@ public class RegisterInventoryCommandHandler : AbstractRequestHandler<RegisterIn
     public override async ValueTask<Guid> Handle(RegisterInventoryCommand request, CancellationToken cancellationToken)
     {
         Guard.Assert<DuplicateInventoryCodeException>(
-            await _duplicateInventoryCodeDomainService.IsInventoryCodeDuplicateAsync(request.Code)
+            await _duplicateInventoryCodeDomainService.IsInventoryCodeDuplicateAsync(request.Code, cancellationToken)
         );
 
         var inventory = Domain.Inventory.InventoryModel.Register(

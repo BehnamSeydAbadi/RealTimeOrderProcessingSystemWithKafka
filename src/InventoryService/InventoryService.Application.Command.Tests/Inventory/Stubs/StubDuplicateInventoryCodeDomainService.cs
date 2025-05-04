@@ -18,7 +18,7 @@ public class StubDuplicateInventoryCodeDomainService : IDuplicateInventoryCodeDo
         return this;
     }
 
-    public async Task<bool> IsInventoryCodeDuplicateAsync(string code)
+    public async Task<bool> IsInventoryCodeDuplicateAsync(string code, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
         return _isInventoryCodeDuplicate;

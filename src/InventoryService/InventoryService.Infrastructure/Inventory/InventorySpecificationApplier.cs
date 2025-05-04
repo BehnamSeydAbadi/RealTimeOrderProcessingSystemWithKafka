@@ -15,6 +15,7 @@ public static class InventorySpecificationApplier
             {
                 InventoryGetByCodeSpecification getByCodeSpec => query.Where(i => i.Code == getByCodeSpec.Code),
                 InventoryGetAllSpecification => query,
+                InventoryGetByIdSpecification getByIdSpec => query.Where(i => i.Id == getByIdSpec.InventoryId),
                 _ => throw new ArgumentOutOfRangeException(nameof(specification))
             };
         }

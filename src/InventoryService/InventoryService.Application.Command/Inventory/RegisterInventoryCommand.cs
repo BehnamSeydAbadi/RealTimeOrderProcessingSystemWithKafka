@@ -2,7 +2,7 @@ using Mediator;
 
 namespace InventoryService.Application.Command.Inventory;
 
-public class RegisterInventoryCommand : IRequest<Guid>
+public class RegisterInventoryCommand : ICommand<Guid>
 {
     public string Code { get; set; }
     public string Name { get; set; }

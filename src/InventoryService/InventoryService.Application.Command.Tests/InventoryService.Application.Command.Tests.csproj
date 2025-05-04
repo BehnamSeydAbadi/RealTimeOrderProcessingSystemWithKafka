@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\InventoryService.Application.Command\InventoryService.Application.Command.csproj" />
+      <ProjectReference Include="..\InventoryService.Infrastructure\InventoryService.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

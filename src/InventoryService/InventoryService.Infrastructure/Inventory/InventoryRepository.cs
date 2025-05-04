@@ -14,14 +14,19 @@ public class InventoryRepository : IInventoryRepository
         _dbContext = dbContext;
     }
 
-    public async Task<T[]> GetAsync<T>(params AbstractSpecification[] abstractSpecification)
+    public async Task<T[]> GetAsync<T>(
+        CancellationToken cancellationToken, params AbstractSpecification[] abstractSpecification
+    )
     {
         return await _dbContext.Set<InventoryEntity>().ApplySpecifications(abstractSpecification)
-            .ProjectToType<T>().ToArrayAsync();
+            .ProjectToType<T>().ToArrayAsync(cancellationToken);
     }
 
-    public async Task<bool> AnyAsync(params AbstractSpecification[] abstractSpecification)
+    public async Task<bool> AnyAsync(
+        CancellationToken cancellationToken, params AbstractSpecification[] abstractSpecification
+    )
     {
-        return await _dbContext.Set<InventoryEntity>().ApplySpecifications(abstractSpecification).AnyAsync();
+        return await _dbContext.Set<InventoryEntity>().ApplySpecifications(abstractSpecification)
+            .AnyAsync(cancellationToken);
     }
 }

@@ -3,17 +3,17 @@ using Mediator;
 
 namespace InventoryService.Application.Command.Common;
 
-public abstract class AbstractRequestHandler<TRequest, TResponse>
-    : IRequestHandler<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public abstract class AbstractCommandHandler<TCommand, TResponse>
+    : ICommandHandler<TCommand, TResponse> where TCommand : ICommand<TResponse>
 {
     protected readonly IPublisher Publisher;
 
-    public AbstractRequestHandler(IPublisher publisher)
+    public AbstractCommandHandler(IPublisher publisher)
     {
         Publisher = publisher;
     }
 
-    public abstract ValueTask<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
+    public abstract ValueTask<TResponse> Handle(TCommand request, CancellationToken cancellationToken);
 
     protected async Task PublishDomainEventsAsync(Queue<AbstractDomainEvent> domainEventsQueue)
     {

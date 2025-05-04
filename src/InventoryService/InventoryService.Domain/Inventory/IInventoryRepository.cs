@@ -4,6 +4,6 @@ namespace InventoryService.Domain.Inventory;
 
 public interface IInventoryRepository
 {
-    Task<T[]> GetAsync<T>(params AbstractSpecification[] abstractSpecification);
-    Task<bool> AnyAsync(params AbstractSpecification[] abstractSpecification);
+    Task<T[]> GetAsync<T>(CancellationToken cancellationToken, params AbstractSpecification[] abstractSpecification);
+    Task<bool> AnyAsync(CancellationToken cancellationToken, params AbstractSpecification[] abstractSpecification);
 }

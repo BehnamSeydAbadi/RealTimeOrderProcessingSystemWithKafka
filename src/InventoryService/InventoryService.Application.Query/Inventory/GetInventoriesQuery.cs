@@ -17,6 +17,8 @@ public class GetInventoriesQueryHandler : IQueryHandler<GetInventoriesQuery, Inv
 
     public async ValueTask<InventoryViewModel[]> Handle(GetInventoriesQuery query, CancellationToken cancellationToken)
     {
-        return await _repository.GetAsync<InventoryViewModel>(new InventoryGetAllSpecification());
+        return await _repository.GetAsync<InventoryViewModel>(
+            cancellationToken, new InventoryGetAllSpecification()
+        );
     }
 }
