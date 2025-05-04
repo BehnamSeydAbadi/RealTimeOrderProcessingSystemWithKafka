@@ -1,6 +1,7 @@
 using InventoryService.Domain.Common;
 using InventoryService.Domain.Inventory.Dto;
 using InventoryService.Domain.Inventory.Events;
+using InventoryService.Domain.Inventory.Exceptions;
 using InventoryService.Domain.Product;
 using Mapster;
 
@@ -35,6 +36,8 @@ public class InventoryModel : AbstractAggregateRoot
 
     public Guid AddProduct(ProductDto productDto)
     {
+        Guard.Assert<InActiveInventoryException>(this.IsActive is false);
+
         var productAddedEvent = new ProductAddedToInventoryEvent(
             this.Id, Guid.NewGuid(), productDto.Name, productDto.StockKeepingUnit, productDto.Color,
             productDto.UnitOfMeasure, productDto.IsPerishable, productDto.Dimensions, productDto.Weight,
