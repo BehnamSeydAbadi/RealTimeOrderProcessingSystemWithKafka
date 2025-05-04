@@ -13,9 +13,8 @@ public static class InventorySpecificationApplier
         {
             query = specification switch
             {
-                InventoryByCodeSpecification inventoryByCodeSpecification
-                    => query.Where(i => i.Code == inventoryByCodeSpecification.Code),
-
+                InventoryGetByCodeSpecification getByCodeSpec => query.Where(i => i.Code == getByCodeSpec.Code),
+                InventoryGetAllSpecification => query,
                 _ => throw new ArgumentOutOfRangeException(nameof(specification))
             };
         }

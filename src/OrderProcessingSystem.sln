@@ -44,6 +44,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Infrastructure", "InventoryService\InventoryService.Infrastructure\InventoryService.Infrastructure.csproj", "{B714119B-FE4E-4DB6-91ED-82C2E1CF97EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.WebApi", "InventoryService\InventoryService.WebApi\InventoryService.WebApi.csproj", "{BF2095CA-0B06-483D-BF80-06C16F65F83F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService.Application.Query", "InventoryService\InventoryService.Application.Query\InventoryService.Application.Query.csproj", "{BB636BA9-73CC-4881-A3A2-95BEBE98FE54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +106,14 @@ Global
 		{B714119B-FE4E-4DB6-91ED-82C2E1CF97EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B714119B-FE4E-4DB6-91ED-82C2E1CF97EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B714119B-FE4E-4DB6-91ED-82C2E1CF97EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2095CA-0B06-483D-BF80-06C16F65F83F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2095CA-0B06-483D-BF80-06C16F65F83F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2095CA-0B06-483D-BF80-06C16F65F83F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2095CA-0B06-483D-BF80-06C16F65F83F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB636BA9-73CC-4881-A3A2-95BEBE98FE54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB636BA9-73CC-4881-A3A2-95BEBE98FE54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB636BA9-73CC-4881-A3A2-95BEBE98FE54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB636BA9-73CC-4881-A3A2-95BEBE98FE54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,5 +134,7 @@ Global
 		{E1551ECE-774F-4A46-9E99-8E4B309F3F31} = {17EDF301-75CE-4B1A-BF0C-B792BA38D26A}
 		{AA6BAF3B-1560-4F15-8C07-86970541E81C} = {A898D582-E76E-46CC-8E06-9AF6DA270DDB}
 		{B714119B-FE4E-4DB6-91ED-82C2E1CF97EE} = {A898D582-E76E-46CC-8E06-9AF6DA270DDB}
+		{BF2095CA-0B06-483D-BF80-06C16F65F83F} = {A898D582-E76E-46CC-8E06-9AF6DA270DDB}
+		{BB636BA9-73CC-4881-A3A2-95BEBE98FE54} = {A898D582-E76E-46CC-8E06-9AF6DA270DDB}
 	EndGlobalSection
 EndGlobal

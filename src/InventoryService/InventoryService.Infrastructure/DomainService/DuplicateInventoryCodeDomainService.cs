@@ -15,6 +15,6 @@ public class DuplicateInventoryCodeDomainService : IDuplicateInventoryCodeDomain
 
     public async Task<bool> IsInventoryCodeDuplicateAsync(string code)
     {
-        return await _repository.AnyAsync(new InventoryByCodeSpecification(code));
+        return await _repository.AnyAsync(new InventoryGetByCodeSpecification(code));
     }
 }

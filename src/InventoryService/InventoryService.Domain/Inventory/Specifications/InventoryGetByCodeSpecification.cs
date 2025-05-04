@@ -2,9 +2,9 @@ using InventoryService.Domain.Common;
 
 namespace InventoryService.Domain.Inventory.Specifications;
 
-public class InventoryByCodeSpecification : AbstractSpecification
+public class InventoryGetByCodeSpecification : AbstractSpecification
 {
-    public InventoryByCodeSpecification(string code)
+    public InventoryGetByCodeSpecification(string code)
     {
         Code = code;
     }

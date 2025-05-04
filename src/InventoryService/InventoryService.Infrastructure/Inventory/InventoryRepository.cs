@@ -14,12 +14,10 @@ public class InventoryRepository : IInventoryRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Domain.Inventory.Inventory?> GetAsync(params AbstractSpecification[] abstractSpecification)
+    public async Task<T[]> GetAsync<T>(params AbstractSpecification[] abstractSpecification)
     {
-        var entityModel = await _dbContext.Set<InventoryEntity>()
-            .ApplySpecifications(abstractSpecification).FirstOrDefaultAsync();
-
-        return entityModel?.Adapt<Domain.Inventory.Inventory>();
+        return await _dbContext.Set<InventoryEntity>().ApplySpecifications(abstractSpecification)
+            .ProjectToType<T>().ToArrayAsync();
     }
 
     public async Task<bool> AnyAsync(params AbstractSpecification[] abstractSpecification)
