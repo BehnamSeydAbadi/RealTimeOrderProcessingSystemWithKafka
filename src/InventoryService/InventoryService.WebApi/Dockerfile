@@ -1,16 +1,20 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 1001
-EXPOSE 8081
+EXPOSE 8000
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+COPY Directory.Build.props . 
+COPY Directory.Packages.props . 
+
 COPY ["InventoryService/InventoryService.WebApi/InventoryService.WebApi.csproj", "InventoryService/InventoryService.WebApi/"]
 COPY ["InventoryService/InventoryService.Application.Command/InventoryService.Application.Command.csproj", "InventoryService/InventoryService.Application.Command/"]
 COPY ["InventoryService/InventoryService.Domain/InventoryService.Domain.csproj", "InventoryService/InventoryService.Domain/"]
 COPY ["InventoryService/InventoryService.Infrastructure/InventoryService.Infrastructure.csproj", "InventoryService/InventoryService.Infrastructure/"]
+COPY ["InventoryService/InventoryService.Application.Query/InventoryService.Application.Query.csproj", "InventoryService/InventoryService.Application.Query/"]
 RUN dotnet restore "InventoryService/InventoryService.WebApi/InventoryService.WebApi.csproj"
 COPY . .
 WORKDIR "/src/InventoryService/InventoryService.WebApi"

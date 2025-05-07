@@ -1,6 +1,18 @@
-﻿services:
+﻿version: '3.9'
+
+services:
   orderservice.webapi:
     image: orderservice.webapi
     build:
       context: .
-      dockerfile: OrderService.WebApi/Dockerfile
+      dockerfile: OrderService/OrderService.WebApi/Dockerfile
+    ports:
+      - 7000:8080
+
+  inventoryservice.webapi:
+    image: inventoryservice.webapi
+    build:
+      context: .
+      dockerfile: InventoryService/InventoryService.WebApi/Dockerfile
+    ports:
+      - 8000:8080

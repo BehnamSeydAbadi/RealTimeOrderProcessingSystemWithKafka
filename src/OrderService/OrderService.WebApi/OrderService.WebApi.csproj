@@ -15,16 +15,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\OrderService.Application.Query\OrderService.Application.Query.csproj"/>
         <ProjectReference Include="..\OrderService.Domain\OrderService.Domain.csproj"/>
         <ProjectReference Include="..\OrderService.Infrastructure\OrderService.Infrastructure.csproj"/>
         <ProjectReference Include="..\OrderService.QueryStack\OrderService.QueryStack.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
