@@ -1,6 +1,24 @@
 ﻿version: '3.9'
 
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
   orderservice.webapi:
     image: orderservice.webapi
     build:
@@ -8,6 +26,8 @@ services:
       dockerfile: OrderService/OrderService.WebApi/Dockerfile
     ports:
       - 7000:8080
+    depends_on:
+      - kafka
 
   inventoryservice.webapi:
     image: inventoryservice.webapi
@@ -16,3 +36,5 @@ services:
       dockerfile: InventoryService/InventoryService.WebApi/Dockerfile
     ports:
       - 8000:8080
+    depends_on:
+      - kafka
