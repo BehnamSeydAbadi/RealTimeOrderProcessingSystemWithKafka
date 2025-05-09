@@ -17,6 +17,6 @@ public class GetInventoryProductsQueryHandler : IQueryHandler<GetInventoryProduc
         GetInventoryProductsQuery query, CancellationToken cancellationToken
     )
     {
-        return await _repository.GetProductsAsync<ProductViewModel>(cancellationToken, inventoryId: query.Id);
+        return await _repository.GetProductsAsync<ProductViewModel>(inventoryId: query.Id, cancellationToken: cancellationToken);
     }
 }

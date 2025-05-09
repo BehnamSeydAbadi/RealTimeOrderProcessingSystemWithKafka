@@ -98,4 +98,120 @@ public class InventoryModelTests
 
         action.Should().ThrowExactly<InActiveInventoryException>();
     }
+
+    [Fact(DisplayName =
+        "There is an inventory, When it gets inactive, Then it should go inactive successfully")]
+    public void WhenAnInventoryGetInactive_ThenItShouldGoInactiveSuccessfully()
+    {
+        var inventory = InventoryModel.Register(new RegisterDto
+        {
+            Code = "0101",
+            Name = "Tehran inventory",
+            Location = "Tehran",
+            Description = "Just an inventory",
+            IsActive = true
+        });
+
+        inventory.BecomeInactive();
+
+        inventory.IsActive.Should().BeFalse();
+    }
+
+    [Fact(DisplayName =
+        "There is an inactive inventory, When it gets activated, Then it should go active successfully")]
+    public void WhenAnInactiveInventoryGetsActivated_ThenItShouldGoActiveSuccessfully()
+    {
+        var inventory = InventoryModel.Register(new RegisterDto
+        {
+            Code = "0101",
+            Name = "Tehran inventory",
+            Location = "Tehran",
+            Description = "Just an inventory",
+            IsActive = false
+        });
+
+        inventory.Activate();
+
+        inventory.IsActive.Should().BeTrue();
+    }
+
+    [Fact(DisplayName =
+        "There is an inventory with some products, When a product gets removed from it, Then it should be removed successfully")]
+    public void WhenAProductGetsRemovedFromTheInventory_ShouldBeRemovedFromTheInventory()
+    {
+        var inventory = InventoryModel.Register(new RegisterDto
+        {
+            Code = "0101",
+            Name = "Tehran inventory",
+            Location = "Tehran",
+            Description = "Just an inventory",
+            IsActive = true
+        });
+
+        var productId = inventory.AddProduct(new ProductDto
+        {
+            Name = "Apple",
+            StockKeepingUnit = "APPLE-RED-1000-KG",
+            Color = "Red",
+            UnitOfMeasure = ProductUnitOfMeasure.Kg,
+            IsPerishable = true,
+            Dimensions = "10*10",
+            Weight = "1000",
+            Category = ProductCategory.Ingredients,
+        });
+
+        inventory.RemoveProduct(productId);
+
+        inventory.Products.Should().BeEmpty();
+    }
+
+    [Fact(DisplayName =
+        "There is an inactive inventory with some products, When a product gets removed from it, Then an exception should be thrown")]
+    public void WhenAProductGetsRemovedFromAnInactiveInventory_ShouldThrowAnException()
+    {
+        var inventory = InventoryModel.Register(new RegisterDto
+        {
+            Code = "0101",
+            Name = "Tehran inventory",
+            Location = "Tehran",
+            Description = "Just an inventory",
+            IsActive = true
+        });
+
+        var productId = inventory.AddProduct(new ProductDto
+        {
+            Name = "Apple",
+            StockKeepingUnit = "APPLE-RED-1000-KG",
+            Color = "Red",
+            UnitOfMeasure = ProductUnitOfMeasure.Kg,
+            IsPerishable = true,
+            Dimensions = "10*10",
+            Weight = "1000",
+            Category = ProductCategory.Ingredients,
+        });
+
+        inventory.BecomeInactive();
+
+        var action = () => inventory.RemoveProduct(productId);
+
+        action.Should().ThrowExactly<InActiveInventoryException>();
+    }
+
+    [Fact(DisplayName =
+        "There is an inactive inventory with some products, When a product gets removed from it, Then an exception should be thrown")]
+    public void WhenAProductDoesNotExistInAnInventory_AndItGetsRemovedFromIt_ShouldThrowAnException()
+    {
+        var inventory = InventoryModel.Register(new RegisterDto
+        {
+            Code = "0101",
+            Name = "Tehran inventory",
+            Location = "Tehran",
+            Description = "Just an inventory",
+            IsActive = true
+        });
+
+        var action = () => inventory.RemoveProduct(productId: Guid.Empty);
+
+        action.Should().ThrowExactly<ProductNotFoundException>();
+    }
 }

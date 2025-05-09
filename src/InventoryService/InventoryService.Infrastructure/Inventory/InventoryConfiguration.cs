@@ -14,5 +14,6 @@ public class InventoryConfiguration : IEntityTypeConfiguration<InventoryEntity>
         builder.Property(i => i.Description).HasMaxLength(256).IsRequired();
         builder.Property(i => i.IsActive).IsRequired();
         builder.Property(i => i.RegisteredAt).IsRequired();
+        builder.Seed();
     }
 }

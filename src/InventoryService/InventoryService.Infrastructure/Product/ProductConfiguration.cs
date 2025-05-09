@@ -16,5 +16,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
         builder.Property(p => p.Dimensions).HasMaxLength(128).IsRequired();
         builder.Property(p => p.Weight).HasMaxLength(16).IsRequired();
         builder.Property(p => p.Category).HasConversion<int>().IsRequired();
+
+        builder.Seed();
     }
 }

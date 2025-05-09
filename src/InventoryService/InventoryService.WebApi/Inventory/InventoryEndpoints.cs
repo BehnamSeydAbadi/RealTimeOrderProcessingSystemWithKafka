@@ -1,4 +1,5 @@
 using InventoryService.Application.Command.Inventory;
+using InventoryService.Application.Command.Inventory.Commands;
 using InventoryService.Application.Query.Inventory;
 using InventoryService.WebApi.Inventory.Dto;
 using Mapster;

@@ -31,7 +31,7 @@ public class InventoryModel : AbstractAggregateRoot
     public string Description { get; private set; }
     public DateTime RegisteredAt { get; private set; }
     public bool IsActive { get; private set; }
-    public List<ProductModel> Products { get; private set; } = new();
+    public List<ProductModel> Products { get; private set; } = [];
 
 
     public Guid AddProduct(ProductDto productDto)
@@ -48,6 +48,35 @@ public class InventoryModel : AbstractAggregateRoot
         Mutate(productAddedEvent);
 
         return productAddedEvent.ProductId;
+    }
+
+    public bool AnyProduct(Guid productId) => this.Products.Any(p => p.Id == productId);
+
+    public void RemoveProduct(Guid productId)
+    {
+        Guard.Assert<InActiveInventoryException>(this.IsActive is false);
+        Guard.Assert<ProductNotFoundException>(this.Products.Any(p => p.Id == productId) is false);
+
+        var productRemovedFromInventoryEvent = new ProductRemovedFromInventoryEvent(this.Id, productId);
+
+        EnqueueDomainEvent(productRemovedFromInventoryEvent);
+        Mutate(productRemovedFromInventoryEvent);
+    }
+
+    public void BecomeInactive()
+    {
+        var inventoryBecameInactiveEvent = new InventoryBecameInactiveEvent(this.Id);
+
+        EnqueueDomainEvent(inventoryBecameInactiveEvent);
+        Mutate(inventoryBecameInactiveEvent);
+    }
+
+    public void Activate()
+    {
+        var inventoryBecameInactiveEvent = new InventoryActivatedEvent(this.Id);
+
+        EnqueueDomainEvent(inventoryBecameInactiveEvent);
+        Mutate(inventoryBecameInactiveEvent);
     }
 
 
@@ -80,5 +109,20 @@ public class InventoryModel : AbstractAggregateRoot
                 domainEvent.ProductCategory
             )
         );
+    }
+
+    private void On(ProductRemovedFromInventoryEvent domainEvent)
+    {
+        this.Products.RemoveAll(p => p.Id == domainEvent.ProductId);
+    }
+
+    private void On(InventoryBecameInactiveEvent domainEvent)
+    {
+        this.IsActive = false;
+    }
+
+    private void On(InventoryActivatedEvent domainEvent)
+    {
+        this.IsActive = true;
     }
 }

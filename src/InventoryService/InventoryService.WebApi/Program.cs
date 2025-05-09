@@ -1,4 +1,6 @@
+using InventoryService.Application.Command;
 using InventoryService.Infrastructure;
+using InventoryService.WebApi.BackgroundServices;
 using InventoryService.WebApi.Inventory;
 using Mapster;
 
@@ -8,14 +10,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMapster();
 builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
-InventoryServiceInfrastructureBootstrapper.Run(builder.Services);
+
+ApplicationCommandsBootstrapper.Run(builder.Services);
+InfrastructureBootstrapper.Run(builder.Services, builder.Configuration);
+
+builder.Services.AddHostedService<OrderPlacedSubscriberBackgroundService>();
 
 InventoryMapper.Register();
 ProductMapper.Register();
 
 var app = builder.Build();
 
-EnsureDatabaseCreated(app);
+EnsureInventoryServiceDbContextCreated(app);
+EnsureOutboxInboxDbContextCreated(app);
 
 InventoryEndpoints.Map(app);
 
@@ -24,9 +31,18 @@ app.UseSwaggerUI();
 
 app.Run();
 
-void EnsureDatabaseCreated(WebApplication webApplication)
+return;
+
+void EnsureInventoryServiceDbContextCreated(WebApplication webApplication)
 {
     var serviceScope = webApplication.Services.CreateScope();
     var orderServiceDbContext = serviceScope.ServiceProvider.GetRequiredService<InventoryServiceDbContext>();
+    orderServiceDbContext.Database.EnsureCreated();
+}
+
+void EnsureOutboxInboxDbContextCreated(WebApplication webApplication)
+{
+    var serviceScope = webApplication.Services.CreateScope();
+    var orderServiceDbContext = serviceScope.ServiceProvider.GetRequiredService<OutboxInboxDbContext>();
     orderServiceDbContext.Database.EnsureCreated();
 }

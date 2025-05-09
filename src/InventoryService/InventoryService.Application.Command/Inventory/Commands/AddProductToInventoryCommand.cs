@@ -1,7 +1,7 @@
 using InventoryService.Domain.Product;
 using Mediator;
 
-namespace InventoryService.Application.Command.Inventory;
+namespace InventoryService.Application.Command.Inventory.Commands;
 
 public class AddProductToInventoryCommand : ICommand<Guid>
 {

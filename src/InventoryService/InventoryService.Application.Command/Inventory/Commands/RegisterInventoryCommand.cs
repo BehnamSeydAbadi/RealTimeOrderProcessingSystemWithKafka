@@ -1,6 +1,6 @@
 using Mediator;
 
-namespace InventoryService.Application.Command.Inventory;
+namespace InventoryService.Application.Command.Inventory.Commands;
 
 public class RegisterInventoryCommand : ICommand<Guid>
 {

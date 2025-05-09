@@ -1,6 +1,7 @@
 using InventoryService.Domain.Common;
 using InventoryService.Domain.Inventory.Specifications;
 using InventoryService.Infrastructure.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryService.Infrastructure.Inventory;
 
@@ -22,6 +23,7 @@ public static class InventorySpecificationApplier
                     => inventoryQuery,
                 InventoryGetByIdSpecification getByIdSpec
                     => inventoryQuery.Where(i => i.Id == getByIdSpec.InventoryId),
+                
                 _ => throw new ArgumentOutOfRangeException(nameof(specification))
             };
         }

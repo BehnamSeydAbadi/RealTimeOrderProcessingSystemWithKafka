@@ -4,11 +4,11 @@ using OrderService.Domain.Order.Events;
 
 namespace OrderService.Infrastructure.Order.EventHandlers;
 
-public class OrderPlacedEventHandler : INotificationHandler<OrderPlacedEvent>
+public class OrderPlacedEventPersistenceHandler : INotificationHandler<OrderPlacedEvent>
 {
     private readonly OrderServiceDbContext _dbContext;
 
-    public OrderPlacedEventHandler(OrderServiceDbContext dbContext)
+    public OrderPlacedEventPersistenceHandler(OrderServiceDbContext dbContext)
     {
         _dbContext = dbContext;
     }

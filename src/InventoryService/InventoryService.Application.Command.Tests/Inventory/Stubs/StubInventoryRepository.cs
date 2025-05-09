@@ -38,7 +38,12 @@ public class StubInventoryRepository : IInventoryRepository
         return _inventories.AsQueryable().ApplySpecifications(abstractSpecification).Any();
     }
 
-    public Task<T[]> GetProductsAsync<T>(CancellationToken cancellationToken, Guid inventoryId)
+    public Task<T[]> GetProductsAsync<T>(Guid inventoryId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<T[]> GetInventoriesByProductIdsAsync<T>(Guid[] productIds, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

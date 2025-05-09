@@ -5,4 +5,5 @@ public enum ProductCategory
     Ingredients,
     Electronics,
     Furniture,
+    Vehicles,
 }

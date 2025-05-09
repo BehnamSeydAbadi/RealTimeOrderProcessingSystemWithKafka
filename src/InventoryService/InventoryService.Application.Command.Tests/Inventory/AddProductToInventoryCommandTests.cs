@@ -1,5 +1,6 @@
 using FluentAssertions;
 using InventoryService.Application.Command.Inventory;
+using InventoryService.Application.Command.Inventory.Commands;
 using InventoryService.Application.Command.Tests.Inventory.Stubs;
 using InventoryService.Domain.Inventory.Dto;
 using InventoryService.Domain.Inventory.Exceptions;

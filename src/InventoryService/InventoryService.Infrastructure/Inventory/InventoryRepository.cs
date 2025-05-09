@@ -13,12 +13,22 @@ public class InventoryRepository : AbstractRepository<InventoryEntity>, IInvento
     {
     }
 
-    public async Task<T[]> GetProductsAsync<T>(CancellationToken cancellationToken, Guid inventoryId)
+    public async Task<T[]> GetProductsAsync<T>(Guid inventoryId, CancellationToken cancellationToken)
     {
         return await DbContext.Set<InventoryProductEntity>()
             .Include(ip => ip.Product)
             .Where(ip => ip.InventoryId == inventoryId)
             .Select(ip => ip.Product)
+            .ProjectToType<T>()
+            .ToArrayAsync(cancellationToken);
+    }
+
+    public async Task<T[]> GetInventoriesByProductIdsAsync<T>(Guid[] productIds, CancellationToken cancellationToken)
+    {
+        return await DbContext.Set<InventoryProductEntity>()
+            .Include(ip => ip.Inventory)
+            .Where(ip => productIds.Contains(ip.ProductId))
+            .Select(ip => ip.Inventory)
             .ProjectToType<T>()
             .ToArrayAsync(cancellationToken);
     }

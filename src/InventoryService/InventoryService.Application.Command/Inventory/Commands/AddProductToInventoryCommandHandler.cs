@@ -4,10 +4,9 @@ using InventoryService.Domain.Inventory;
 using InventoryService.Domain.Inventory.Dto;
 using InventoryService.Domain.Inventory.Exceptions;
 using InventoryService.Domain.Inventory.Specifications;
-using Mapster;
 using Mediator;
 
-namespace InventoryService.Application.Command.Inventory;
+namespace InventoryService.Application.Command.Inventory.Commands;
 
 public class AddProductToInventoryCommandHandler : AbstractCommandHandler<AddProductToInventoryCommand, Guid>
 {

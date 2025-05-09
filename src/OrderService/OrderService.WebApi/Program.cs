@@ -9,13 +9,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMapster();
 builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
-OrderServiceInfrastructureBootstrapper.Run(builder.Services);
+OrderServiceInfrastructureBootstrapper.Run(builder.Services, builder.Configuration);
 
 OrderMapper.Register();
 
 var app = builder.Build();
 
-EnsureDatabaseCreated(app);
+EnsureOrderServiceDbContextCreated(app);
+EnsureOutboxInboxDbContextCreated(app);
 
 OrderEndpoints.Map(app);
 
@@ -24,10 +25,19 @@ app.UseSwaggerUI();
 
 app.Run();
 
+return;
 
-void EnsureDatabaseCreated(WebApplication webApplication)
+
+void EnsureOrderServiceDbContextCreated(WebApplication webApplication)
 {
     var serviceScope = webApplication.Services.CreateScope();
     var orderServiceDbContext = serviceScope.ServiceProvider.GetRequiredService<OrderServiceDbContext>();
+    orderServiceDbContext.Database.EnsureCreated();
+}
+
+void EnsureOutboxInboxDbContextCreated(WebApplication webApplication)
+{
+    var serviceScope = webApplication.Services.CreateScope();
+    var orderServiceDbContext = serviceScope.ServiceProvider.GetRequiredService<OutboxInboxDbContext>();
     orderServiceDbContext.Database.EnsureCreated();
 }

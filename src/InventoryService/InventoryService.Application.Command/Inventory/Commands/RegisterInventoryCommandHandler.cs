@@ -5,7 +5,7 @@ using InventoryService.Domain.Inventory.Dto;
 using InventoryService.Domain.Inventory.Exceptions;
 using Mediator;
 
-namespace InventoryService.Application.Command.Inventory;
+namespace InventoryService.Application.Command.Inventory.Commands;
 
 public class RegisterInventoryCommandHandler : AbstractCommandHandler<RegisterInventoryCommand, Guid>
 {
